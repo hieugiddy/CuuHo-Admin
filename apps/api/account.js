@@ -48,9 +48,9 @@ router.route("/dang-ky")
         }
 
     });
-router.route("/kiem-tra-dang-nhap")
+router.route("/kiem-tra-dang-nhap/:username/:password")
     .get(function (req, res) {
-        var user = req.body;
+        var user = req.params;
 
         try {
             if (!UserHelper.usernameValidation(user.username))
