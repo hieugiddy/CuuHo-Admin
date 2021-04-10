@@ -50,7 +50,7 @@ router.route("/dang-ky")
     });
 router.route("/kiem-tra-dang-nhap")
     .post(function (req, res) {
-        var user = req.params;
+        var user = req.body;
 
         try {
             if (!UserHelper.usernameValidation(user.username))
