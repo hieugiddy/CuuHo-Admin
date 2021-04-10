@@ -48,8 +48,8 @@ router.route("/dang-ky")
         }
 
     });
-router.route("/kiem-tra-dang-nhap/:username/:password")
-    .get(function (req, res) {
+router.route("/kiem-tra-dang-nhap")
+    .post(function (req, res) {
         var user = req.params;
 
         try {
