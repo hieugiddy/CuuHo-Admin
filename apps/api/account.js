@@ -8,7 +8,6 @@ var UserHelper = require("../helpers/account");
 router.route("/dang-ky")
     .post(function (req, res) {
         var user = req.body;
-        var hoTen = 'No Name';
         var ngSinh = '2000-01-01';
         var gTinh = 1;
         var qTich = 'VN';
@@ -23,7 +22,7 @@ router.route("/dang-ky")
             users = {
                 TenDangNhap: user.username,
                 MatKhau: user.password,
-                HoVaTen: hoTen,
+                HoVaTen: user.username,
                 SoDienThoai: user.telephone,
                 NgaySinh: ngSinh,
                 GioiTinh: gTinh,
@@ -35,7 +34,7 @@ router.route("/dang-ky")
                 res.json({ "Messenger": "Đã có lỗi xảy ra" });
             else
                 result.then(function (data) {
-                    res.json({ "Messenger": "Thành công" });
+                    res.json({ "Messenger": "Đăng ký thành công" });
                 }).catch(function (err) {
                     if (err.code == "ER_DUP_ENTRY")
                         res.json({ "Messenger": "Tên đăng nhập đã tồn tại" });
@@ -56,7 +55,7 @@ router.route("/kiem-tra-dang-nhap")
             if (!UserHelper.usernameValidation(user.username))
                 throw 'Tên đăng nhập không hợp lệ';
             if (!UserHelper.passwordValidation(user.password))
-                throw 'Mật khẩu sai định dạng';
+                throw 'Mật khẩu không đúng';
             var result = UserModel.xuLiLogin(user.username,user.password);
             
             if (!result)
