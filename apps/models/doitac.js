@@ -2,15 +2,23 @@ var q = require("q");
 var db = require("../common/DB");
 var conn = db.getConnection();
 
-function getDsDoiTac(trangthai) {
-    if (trangthai) {
+function getDsDoiTac(linhvuc) {
+    if (linhvuc) {
         var defer = q.defer();
-        conn.query('SELECT * FROM doitac, loaihinhkinhdoanh WHERE doitac.IDLoaiHinh=loaihinhkinhdoanh.IDLoaiHinh and TrangThai=?', trangthai, function (error, results, fields) {
-            if (error)
-                defer.reject(error);
-            else
-                defer.resolve(results);
-        });
+        if(linhvuc=="all")
+            conn.query('SELECT * FROM doitac, loaihinhkinhdoanh WHERE doitac.IDLoaiHinh=loaihinhkinhdoanh.IDLoaiHinh and TrangThai=1', function (error, results, fields) {
+                if (error)
+                    defer.reject(error);
+                else
+                    defer.resolve(results);
+            });
+        else
+            conn.query('SELECT * FROM doitac, loaihinhkinhdoanh WHERE doitac.IDLoaiHinh=loaihinhkinhdoanh.IDLoaiHinh and TrangThai=1 AND doitac.ID_DoiTac IN (SELECT ID_DoiTac FROM chitietlinhvuckinhdoanh WHERE ID_LinhVuc=?)',linhvuc, function (error, results, fields) {
+                if (error)
+                    defer.reject(error);
+                else
+                    defer.resolve(results);
+            });
 
         return defer.promise;
     }
@@ -66,7 +74,7 @@ function getLinhVucKinhDoanh(idDoiTac){
 function getHinhAnh(idDoiTac, loai, limit){
     if (idDoiTac) {
         var defer = q.defer();
-        conn.query('SELECT * FROM hinhanhdoitac WHERE ID_DoiTac=? AND LoaiAnh=? limit ?', [idDoiTac,loai,limit], function (error, results, fields) {
+        conn.query('SELECT * FROM hinhanhdoitac WHERE ID_DoiTac=? AND LoaiAnh=?', [idDoiTac,loai], function (error, results, fields) {
             if (error)
                 defer.reject(error);
             else

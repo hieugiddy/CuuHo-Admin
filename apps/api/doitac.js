@@ -8,10 +8,10 @@ router.route("/")
     .post(async function (req, res) {
         var doitac = req.body;
         try {
-            let dsDoiTac = await DoiTacModel.getDsDoiTac(doitac.trangthai).then((data) => data);
+            let dsDoiTac = await DoiTacModel.getDsDoiTac(doitac.linhvuc).then((data) => data);
             let dsDoiTacVaChiNhanh = await Promise.all(dsDoiTac.map(async (item) => {
                 let dsLinhVucKinhDoanh = await DoiTacModel.getLinhVucKinhDoanh(item.ID_DoiTac)
-                let anhDaiDien = await DoiTacModel.getHinhAnh(item.ID_DoiTac,2,1)
+                let anhDaiDien = await DoiTacModel.getHinhAnh(item.ID_DoiTac,2)
                 let dsChiNhanh= await DoiTacModel.getDsChiNhanh(item.ID_DoiTac)
                 let dsChiNhanhVaDanhGia = await Promise.all(dsChiNhanh.map(async (item) => {
                     let diem = await DoiTacModel.getDiemDanhGia(item.ID_ChiNhanh)
@@ -23,7 +23,7 @@ router.route("/")
                 
                 return ({
                     ...item,
-                    AnhDaiDien: anhDaiDien[0].LinkAnh,
+                    AnhDaiDien: anhDaiDien,
                     LinhVucKinhDoanh: dsLinhVucKinhDoanh,
                     ChiNhanh: dsChiNhanhVaDanhGia
                 })
