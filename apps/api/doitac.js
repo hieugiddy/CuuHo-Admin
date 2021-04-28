@@ -1,6 +1,4 @@
 var express = require("express");
-var DB = require("../common/DB");
-var conn = DB.getConnection();
 var router = express.Router();
 var DoiTacModel = require("../models/doitac");
 
@@ -11,16 +9,16 @@ router.route("/")
             let dsDoiTac = await DoiTacModel.getDsDoiTac(doitac.linhvuc).then((data) => data);
             let dsDoiTacVaChiNhanh = await Promise.all(dsDoiTac.map(async (item) => {
                 let dsLinhVucKinhDoanh = await DoiTacModel.getLinhVucKinhDoanh(item.ID_DoiTac)
-                let anhDaiDien = await DoiTacModel.getHinhAnh(item.ID_DoiTac,2)
-                let dsChiNhanh= await DoiTacModel.getDsChiNhanh(item.ID_DoiTac)
+                let anhDaiDien = await DoiTacModel.getHinhAnh(item.ID_DoiTac, 2)
+                let dsChiNhanh = await DoiTacModel.getDsChiNhanh(item.ID_DoiTac)
                 let dsChiNhanhVaDanhGia = await Promise.all(dsChiNhanh.map(async (item) => {
                     let diem = await DoiTacModel.getDiemDanhGia(item.ID_ChiNhanh)
-                    return({
+                    return ({
                         ...item,
-                        Diem: (diem[0].Diem === null) ? 0:diem[0].Diem
+                        Diem: (diem[0].Diem === null) ? 0 : diem[0].Diem
                     })
                 }));
-                
+
                 return ({
                     ...item,
                     AnhDaiDien: anhDaiDien,
@@ -28,14 +26,67 @@ router.route("/")
                     ChiNhanh: dsChiNhanhVaDanhGia
                 })
             })).then(data => data);
-            
-            res.json(dsDoiTacVaChiNhanh);            
+
+            res.json(dsDoiTacVaChiNhanh);
         }
         catch (e) {
             res.json({ "Messenger": e });
         }
 
     });
-
+router.route("/dichvu")
+    .post(function (req, res) {
+        var data = req.body;
+        try {
+            var result = DoiTacModel.getDichVu(data.idChiNhanh);
+            if (!result)
+                res.json({ "Messenger": "Đã có lỗi xảy ra" });
+            else
+                result.then(function (dt) {
+                    res.json(dt);
+                }).catch(function (err) {
+                    res.json({ "Messenger": err });
+                })
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+    });
+router.route("/uudai")
+    .post(function (req, res) {
+        var data = req.body;
+        try {
+            var result = DoiTacModel.getUuDai(data.idDoiTac);
+            if (!result)
+                res.json({ "Messenger": "Đã có lỗi xảy ra" });
+            else
+                result.then(function (dt) {
+                    res.json(dt);
+                }).catch(function (err) {
+                    res.json({ "Messenger": err });
+                })
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+    });
+router.route("/danhgia")
+    .post(function (req, res) {
+        var data = req.body;
+        try {
+            var result = DoiTacModel.getDanhGia(data.idChiNhanh);
+            if (!result)
+                res.json({ "Messenger": "Đã có lỗi xảy ra" });
+            else
+                result.then(function (dt) {
+                    res.json(dt);
+                }).catch(function (err) {
+                    res.json({ "Messenger": err });
+                })
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+    });
 module.exports = router;
 

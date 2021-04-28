@@ -86,10 +86,58 @@ function getHinhAnh(idDoiTac, loai, limit){
 
     return false;
 }
+function getDichVu(idChiNhanh){
+    if (idChiNhanh) {
+        var defer = q.defer();
+        conn.query('SELECT * FROM dichvu, chitietdichvu WHERE dichvu.ID_DichVu=chitietdichvu.ID_DichVu AND ID_ChiNhanh=?', [idChiNhanh], function (error, results, fields) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
+function getUuDai(idDoiTac){
+    if (idDoiTac) {
+        var defer = q.defer();
+        conn.query('SELECT * FROM uudai WHERE ID_DoiTac=?', [idDoiTac], function (error, results, fields) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
+function getDanhGia(idChiNhanh){
+    if (idChiNhanh) {
+        var defer = q.defer();
+        conn.query('SELECT * FROM danhgia WHERE ID_ChiNhanh=?', [idChiNhanh], function (error, results, fields) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
 module.exports = {
     getDsDoiTac: getDsDoiTac,
     getDsChiNhanh: getDsChiNhanh,
     getDiemDanhGia: getDiemDanhGia,
     getLinhVucKinhDoanh: getLinhVucKinhDoanh,
-    getHinhAnh: getHinhAnh
+    getHinhAnh: getHinhAnh,
+    getDichVu: getDichVu,
+    getUuDai: getUuDai,
+    getDanhGia: getDanhGia
 }
