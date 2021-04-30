@@ -13,10 +13,15 @@
     </style>
   </head>
   <body>
-    <div id="data"><%= data%></div>
+    <center><h4><%= TenUuDai%></h4></center>
+    <p>
+      <strong>Thời gian áp dụng: </strong>
+      Từ ngày <%= BatDau%> đến ngày <%= KetThuc%>
+    </p>
+    <div id="data"><%= NoiDung%></div>
     <script>
         var s=document.getElementById("data");
-        s.innerHTML = s.textContent;
+        s.innerHTML = '<strong>Nội dung: </strong> <br/>'+s.textContent;
     </script>
   </body>
 </html>

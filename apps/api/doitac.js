@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var DoiTacModel = require("../models/doitac");
+var dateFormat = require('dateformat');
 
 router.route("/")
     .post(async function (req, res) {
@@ -98,7 +99,8 @@ router.route("/chitietdichvu/:id")
             else
                 result.then(function (dt) {
                     res.render("chitietdichvu", {
-                        data: dt[0].MoTa.replace(/(\r\n|\n|\r)/gm, "").trim()
+                        NoiDung: dt[0].MoTa.replace(/(\r\n|\n|\r)/gm, "").trim(),
+                        TenDichVu: dt[0].TenDichVu
                     });
                 }).catch(function (err) {
                     res.json({ "Messenger": err });
@@ -116,8 +118,13 @@ router.route("/chitietuudai/:id")
                 res.json({ "Messenger": "Đã có lỗi xảy ra" });
             else
                 result.then(function (dt) {
+                    var batDau=dateFormat(new Date(dt[0].TgBatDau), "dd/mm/yyyy");
+                    var ketThuc=dateFormat(new Date(dt[0].TgKetThuc), "dd/mm/yyyy");
                     res.render("chitietuudai", {
-                        data: dt[0].NoiDungUuDai.replace(/(\r\n|\n|\r)/gm, "").trim()
+                        NoiDung: dt[0].NoiDungUuDai.replace(/(\r\n|\n|\r)/gm, "").trim(),
+                        BatDau: batDau,
+                        KetThuc: ketThuc,
+                        TenUuDai: dt[0].TenUuDai
                     });
                 }).catch(function (err) {
                     res.json({ "Messenger": err });

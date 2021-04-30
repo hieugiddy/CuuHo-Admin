@@ -104,7 +104,7 @@ function getDichVu(idChiNhanh){
 function getChiTietDichVu(idDichVu){
     if (idDichVu) {
         var defer = q.defer();
-        conn.query('SELECT MoTa FROM dichvu WHERE ID_DichVu=?', [idDichVu], function (error, results, fields) {
+        conn.query('SELECT * FROM dichvu WHERE ID_DichVu=?', [idDichVu], function (error, results, fields) {
             if (error)
                 defer.reject(error);
             else
@@ -134,7 +134,7 @@ function getUuDai(idDoiTac){
 function getChiTietUuDai(idUuDai){
     if (idUuDai) {
         var defer = q.defer();
-        conn.query('SELECT NoiDungUuDai FROM uudai WHERE ID_UuDai=?', [idUuDai], function (error, results, fields) {
+        conn.query('SELECT * FROM uudai WHERE ID_UuDai=?', [idUuDai], function (error, results, fields) {
             if (error)
                 defer.reject(error);
             else
