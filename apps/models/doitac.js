@@ -119,7 +119,7 @@ function getChiTietDichVu(idDichVu){
 function getUuDai(idDoiTac){
     if (idDoiTac) {
         var defer = q.defer();
-        conn.query('SELECT * FROM uudai WHERE ID_DoiTac=?', [idDoiTac], function (error, results, fields) {
+        conn.query('SELECT * FROM uudai WHERE TgKetThuc>=NOW() AND ID_DoiTac=?', [idDoiTac], function (error, results, fields) {
             if (error)
                 defer.reject(error);
             else
