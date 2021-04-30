@@ -101,6 +101,21 @@ function getDichVu(idChiNhanh){
 
     return false;
 }
+function getChiTietDichVu(idDichVu){
+    if (idDichVu) {
+        var defer = q.defer();
+        conn.query('SELECT MoTa FROM dichvu WHERE ID_DichVu=?', [idDichVu], function (error, results, fields) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
 function getUuDai(idDoiTac){
     if (idDoiTac) {
         var defer = q.defer();
@@ -139,5 +154,6 @@ module.exports = {
     getHinhAnh: getHinhAnh,
     getDichVu: getDichVu,
     getUuDai: getUuDai,
-    getDanhGia: getDanhGia
+    getDanhGia: getDanhGia,
+    getChiTietDichVu: getChiTietDichVu
 }
