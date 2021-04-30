@@ -88,5 +88,44 @@ router.route("/danhgia")
             res.json({ "Messenger": e });
         }
     });
+
+router.route("/chitietdichvu/:id")
+    .get(function (req, res) {
+        try {
+            var result = DoiTacModel.getChiTietDichVu(req.params.id);
+            if (!result)
+                res.json({ "Messenger": "Đã có lỗi xảy ra" });
+            else
+                result.then(function (dt) {
+                    res.render("chitietdichvu", {
+                        data: dt[0].MoTa.replace(/(\r\n|\n|\r)/gm, "").trim()
+                    });
+                }).catch(function (err) {
+                    res.json({ "Messenger": err });
+                })
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+    });
+router.route("/chitietuudai/:id")
+    .get(function (req, res) {
+        try {
+            var result = DoiTacModel.getChiTietUuDai(req.params.id);
+            if (!result)
+                res.json({ "Messenger": "Đã có lỗi xảy ra" });
+            else
+                result.then(function (dt) {
+                    res.render("chitietuudai", {
+                        data: dt[0].NoiDungUuDai.replace(/(\r\n|\n|\r)/gm, "").trim()
+                    });
+                }).catch(function (err) {
+                    res.json({ "Messenger": err });
+                })
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+    });
 module.exports = router;
 

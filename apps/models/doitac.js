@@ -131,6 +131,21 @@ function getUuDai(idDoiTac){
 
     return false;
 }
+function getChiTietUuDai(idUuDai){
+    if (idUuDai) {
+        var defer = q.defer();
+        conn.query('SELECT NoiDungUuDai FROM uudai WHERE ID_UuDai=?', [idUuDai], function (error, results, fields) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
 function getDanhGia(idChiNhanh){
     if (idChiNhanh) {
         var defer = q.defer();
@@ -155,5 +170,6 @@ module.exports = {
     getDichVu: getDichVu,
     getUuDai: getUuDai,
     getDanhGia: getDanhGia,
-    getChiTietDichVu: getChiTietDichVu
+    getChiTietDichVu: getChiTietDichVu,
+    getChiTietUuDai: getChiTietUuDai
 }
