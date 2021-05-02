@@ -4,7 +4,17 @@ var conn = DB.getConnection();
 var router = express.Router();
 var UserModel = require("../models/user");
 var UserHelper = require("../helpers/account");
+const multer = require('multer');
 
+const Storage = multer.diskStorage({
+    destination(req, file, callback) {
+        callback(null, '/static/img');
+    },
+    filename(req, file, callback) {
+        callback(null, '${file.fieldname}_${Date.now()}_${file.originalname}');
+    },
+});
+const upload = multer({ storage: Storage });
 router.route("/dang-ky")
     .post(function (req, res) {
         var user = req.body;
@@ -56,8 +66,8 @@ router.route("/kiem-tra-dang-nhap")
                 throw 'Tên đăng nhập không hợp lệ';
             if (!UserHelper.passwordValidation(user.password))
                 throw 'Mật khẩu không đúng';
-            var result = UserModel.xuLiLogin(user.username,user.password);
-            
+            var result = UserModel.xuLiLogin(user.username, user.password);
+
             if (!result)
                 res.json({ "Messenger": "Đã có lỗi xảy ra" });
             else
@@ -72,4 +82,11 @@ router.route("/kiem-tra-dang-nhap")
         }
 
     });
+router.post('/upload-avatar', upload.array('photo', 3), (req, res) => {
+    console.log('file', req.files);
+    console.log('body', req.body);
+    res.status(200).json({
+        message: 'success!',
+    });
+});
 module.exports = router;
