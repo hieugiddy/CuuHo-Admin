@@ -133,18 +133,21 @@ router.route("/cap-nhat-tai-khoan")
 router.route("/doi-mat-khau")
     .post(function (req, res) {
         var user = req.body.user;
+        var NewPassword= req.body.NewPassword;
+        var OldPassword= req.body.OldPassword;
+
         try {
-            if (!UserHelper.passwordValidation(user.NewPassword))
+            if (!UserHelper.passwordValidation(NewPassword))
                 throw 'Mật khẩu sai định dạng';
 
-            var isOldPassword = UserModel.xuLiLogin(user.TenDangNhap, user.OldPassword);
+            var isOldPassword = UserModel.xuLiLogin(user.TenDangNhap, OldPassword);
 
             if (!isOldPassword)
                 res.json({ "Messenger": "Đã có lỗi xảy ra" });
             else
                 isOldPassword.then(function (data) {
                     if (data[0]) {
-                        var result = UserModel.changePassword(user.ID_TaiKhoan, user.NewPassword);
+                        var result = UserModel.changePassword(user.ID_TaiKhoan, NewPassword);
                         if (!result)
                             res.json({ "Messenger": "Đã có lỗi xảy ra" });
                         else
