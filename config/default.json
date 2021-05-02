@@ -1,7 +1,8 @@
 {
     "server":{
-        "host":"//cuuhoxedn.net",
-        "port":"8890"
+        "host":"localhost",
+        "port":"8890",
+        "link":"//admin.cuuhoxedn.net"
     },
     "mysql":{
         "host":"149.28.156.47",

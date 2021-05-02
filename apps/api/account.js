@@ -87,7 +87,7 @@ router.post('/upload-avatar', upload.array('photo', 3), (req, res) => {
     let file = req.files;
     let id= req.body.id;
     
-    let avatar = config.get('server.host')+'/static/img/'+file.filename;
+    let avatar = config.get('server.link')+'/static/img/'+file.filename;
     let result = UserModel.uploadAvatar(id, avatar);
 
     result.then(function (data) {
