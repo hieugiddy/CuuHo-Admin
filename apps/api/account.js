@@ -6,6 +6,7 @@ var UserModel = require("../models/user");
 var UserHelper = require("../helpers/account");
 const multer = require('multer');
 var config = require('config');
+var dateFormat = require('dateformat');
 
 const Storage = multer.diskStorage({
     destination(req, file, callback) {
@@ -103,10 +104,15 @@ router.post('/upload-avatar', upload.array('photo', 3), (req, res) => {
 });
 router.route("/cap-nhat-tai-khoan")
     .post(function (req, res) {
-        var user = req.body;
+        var user = req.body.user;
         try {
             if (!UserHelper.telephoneValidation(user.SoDienThoai))
                 throw 'Số điện thoại sai định dạng';
+            var ngSinh = dateFormat(new Date(user.NgaySinh), "yyyy-mm-dd");
+            user = {
+                ...user,
+                NgaySinh: ngSinh
+            }
 
             var result = UserModel.updateUser(user.ID_TaiKhoan, user);
 
@@ -126,7 +132,7 @@ router.route("/cap-nhat-tai-khoan")
 
 router.route("/doi-mat-khau")
     .post(function (req, res) {
-        var user = req.body;
+        var user = req.body.user;
         try {
             if (!UserHelper.passwordValidation(user.NewPassword))
                 throw 'Mật khẩu sai định dạng';
