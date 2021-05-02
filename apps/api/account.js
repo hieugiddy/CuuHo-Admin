@@ -5,6 +5,7 @@ var router = express.Router();
 var UserModel = require("../models/user");
 var UserHelper = require("../helpers/account");
 const multer = require('multer');
+var config=require('config');
 
 const Storage = multer.diskStorage({
     destination(req, file, callback) {
@@ -86,12 +87,12 @@ router.post('/upload-avatar', upload.array('photo', 3), (req, res) => {
     let file = req.files;
     let id= req.body.id;
     
-    let avatar = appRoot+'/static/img/'+file.fieldname+'_'+Date.now()+'_'+file.originalname;
+    let avatar = config.get('server.host')+'/static/img/'+file.fieldname+'_'+Date.now()+'_'+file.originalname;
     let result = UserModel.uploadAvatar(id, avatar);
 
     result.then(function (data) {
         res.status(200).json({
-            message: 'Thay đổi ảnh đại diện thành công',
+            message: file,
         });
     }).catch(function (err) {
         res.json({ message: err });
