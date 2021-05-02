@@ -87,12 +87,12 @@ router.post('/upload-avatar', upload.array('photo', 3), (req, res) => {
     let file = req.files;
     let id= req.body.id;
     
-    let avatar = config.get('server.host')+'/static/img/'+file.fieldname+'_'+Date.now()+'_'+file.originalname;
+    let avatar = config.get('server.host')+'/static/img/'+file.filename;
     let result = UserModel.uploadAvatar(id, avatar);
 
     result.then(function (data) {
         res.status(200).json({
-            message: file,
+            message: 'Thay đổi ảnh đại diện thành công',
         });
     }).catch(function (err) {
         res.json({ message: err });
