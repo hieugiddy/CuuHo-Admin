@@ -32,8 +32,24 @@ function xuLiLogin(username,password) {
 
     return false;
 }
+function uploadAvatar(id, path) {
+    if (id && path) {
+        var defer = q.defer();
+        conn.query("UPDATE taikhoan SET HinhDaiDien=? WHERE ID_TaiKhoan=?",[path,id], function (error, results) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
 
 module.exports = {
     addUser: addUser,
-    xuLiLogin: xuLiLogin
+    xuLiLogin: xuLiLogin,
+    uploadAvatar: uploadAvatar
 }
