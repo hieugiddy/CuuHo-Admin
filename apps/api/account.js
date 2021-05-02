@@ -137,7 +137,7 @@ router.route("/doi-mat-khau")
             if (!UserHelper.passwordValidation(user.NewPassword))
                 throw 'Mật khẩu sai định dạng';
 
-            var isOldPassword = UserModel.xuLiLogin(user.TenDangNhap, user.MatKhau);
+            var isOldPassword = UserModel.xuLiLogin(user.TenDangNhap, user.OldPassword);
 
             if (!isOldPassword)
                 res.json({ "Messenger": "Đã có lỗi xảy ra" });
