@@ -133,8 +133,8 @@ router.route("/cap-nhat-tai-khoan")
 router.route("/doi-mat-khau")
     .post(function (req, res) {
         var user = req.body.user;
-        var NewPassword= req.body.NewPassword;
-        var OldPassword= req.body.OldPassword;
+        var NewPassword = req.body.NewPassword;
+        var OldPassword = req.body.OldPassword;
 
         try {
             if (!UserHelper.passwordValidation(NewPassword))
@@ -167,6 +167,61 @@ router.route("/doi-mat-khau")
         }
         catch (e) {
             res.json({ "Messenger": e });
+        }
+    });
+
+router.route("/danh-sach-yeu-cau")
+    .post(async function (req, res) {
+        var user = req.body;
+
+        try {
+            var dsYeuCau = await UserModel.dsYeuCauCuuHo(user.ID_TaiKhoan, user.TrangThai).then((data) => data);
+            let dsHinhAnhVaYeuCau = await Promise.all(dsYeuCau.map(async (item) => {
+                let dsHinhAnh = await UserModel.dsHinhAnhYeuCau(item.ID_YeuCau)
+
+                return ({
+                    ...item,
+                    HinhAnh: dsHinhAnh,
+                })
+            })).then(data => data);
+
+            res.json(dsHinhAnhVaYeuCau);
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+    });
+router.route("/them-yeu-cau")
+    .post(async function (req, res) {
+        var data = req.body;
+
+        try {
+            var YeuCauData = {
+                ID_TaiKhoan: data.ID_TaiKhoan,
+                ID_DoiTac: data.ID_DoiTac,
+                LiDoCuuHo: data.LiDoCuuHo,
+                MoTaYeuCau: data.MoTaYeuCau,
+                DiaDiemCuuHo: data.DiaDiemCuuHo,
+                ViDo: data.ViDo,
+                KinhDo: data.KinhDo
+            }
+            
+            var result = await UserModel.themYeuCauCuuHo(YeuCauData).then((data) => data);
+            var ID_YeuCau = await UserModel.getIDYeuCau(data.ID_TaiKhoan, data.ID_DoiTac).then((data) => data);
+            var HinhAnhData = {
+                LinkAnh: data.LinkAnh,
+                ID_YeuCau: ID_YeuCau
+            }
+            var themHinhAnh = UserModel.themHinhAnhCuuHo(HinhAnhData);
+            themHinhAnh.then(data => {
+                res.json({ "KetQua": true })
+            })
+            .catch(e){
+                res.json({ "KetQua": false })
+            }
+        }
+        catch (e) {
+            res.json({ "KetQua": false });
         }
     });
 module.exports = router;
