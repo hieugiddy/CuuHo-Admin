@@ -214,11 +214,8 @@ router.route("/them-yeu-cau")
             }
             var themHinhAnh = UserModel.themHinhAnhCuuHo(HinhAnhData);
             themHinhAnh.then(data => {
-                res.json({ "KetQua": true })
+                res.json({ "KetQua": true });
             })
-            .catch(e){
-                res.json({ "KetQua": false })
-            }
         }
         catch (e) {
             res.json({ "KetQua": false });
