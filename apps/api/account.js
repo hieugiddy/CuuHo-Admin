@@ -197,19 +197,19 @@ router.post("/them-yeu-cau", upload.array('photo', 3), async function (req, res)
 
     try {
         var YeuCauData = {
-            ID_TaiKhoan: data.ID_TaiKhoan,
-            ID_DoiTac: data.ID_DoiTac,
-            LiDoCuuHo: data.LiDoCuuHo,
-            MoTaYeuCau: data.MoTaYeuCau,
-            DiaDiemCuuHo: data.DiaDiemCuuHo,
-            ViDo: data.ViDo,
-            KinhDo: data.KinhDo
+            ID_TaiKhoan: data[0].ID_TaiKhoan,
+            ID_DoiTac: data[0].ID_DoiTac,
+            LiDoCuuHo: data[0].LiDoCuuHo,
+            MoTaYeuCau: data[0].MoTaYeuCau,
+            DiaDiemCuuHo: data[0].DiaDiemCuuHo,
+            ViDo: data[0].ViDo,
+            KinhDo: data[0].KinhDo
         }
 
         var result = await UserModel.themYeuCauCuuHo(YeuCauData);
-        var ID_YeuCau = await UserModel.getIDYeuCau(data.ID_TaiKhoan, data.ID_DoiTac).then((data) => data);
+        var ID_YeuCau = await UserModel.getIDYeuCau(data[0].ID_TaiKhoan, data[0].ID_DoiTac).then((data) => data);
 
-        file[0].map(async (item) => {
+        file.map(async (item) => {
             var HinhAnhData = {
                 LinkAnh: config.get('server.link') + '/static/img/' + item.filename,
                 ID_YeuCau: ID_YeuCau
