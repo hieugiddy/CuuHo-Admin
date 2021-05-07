@@ -192,39 +192,34 @@ router.route("/danh-sach-yeu-cau")
         }
     });
 router.post("/them-yeu-cau", upload.array('photo', 3), async function (req, res) {
-        var data = req.body;
-        let file = req.files;
+    var data = req.body;
+    let file = req.files;
 
-        try {
-            var YeuCauData = {
-                ID_TaiKhoan: data.ID_TaiKhoan,
-                ID_DoiTac: data.ID_DoiTac,
-                LiDoCuuHo: data.LiDoCuuHo,
-                MoTaYeuCau: data.MoTaYeuCau,
-                DiaDiemCuuHo: data.DiaDiemCuuHo,
-                ViDo: data.ViDo,
-                KinhDo: data.KinhDo
+    try {
+        var YeuCauData = {
+            ID_TaiKhoan: data.ID_TaiKhoan,
+            ID_DoiTac: data.ID_DoiTac,
+            LiDoCuuHo: data.LiDoCuuHo,
+            MoTaYeuCau: data.MoTaYeuCau,
+            DiaDiemCuuHo: data.DiaDiemCuuHo,
+            ViDo: data.ViDo,
+            KinhDo: data.KinhDo
+        }
+
+        var result = await UserModel.themYeuCauCuuHo(YeuCauData);
+        var ID_YeuCau = await UserModel.getIDYeuCau(data.ID_TaiKhoan, data.ID_DoiTac).then((data) => data);
+
+        file[0].map(async (item) => {
+            var HinhAnhData = {
+                LinkAnh: config.get('server.link') + '/static/img/' + item.filename,
+                ID_YeuCau: ID_YeuCau
             }
-
-            var result = await UserModel.themYeuCauCuuHo(YeuCauData).then(() => (true)).catch(()=> (false));
-            if(result)
-                var ID_YeuCau = await UserModel.getIDYeuCau(data.ID_TaiKhoan, data.ID_DoiTac).then((data) => data).catch(()=> (false));
-            
-            if(result && ID_YeuCau)
-                file[0].map((item) => {
-                    var HinhAnhData = {
-                        LinkAnh: config.get('server.link') + '/static/img/' + item.filename,
-                        ID_YeuCau: ID_YeuCau
-                    }
-                    var themHinhAnh = await UserModel.themHinhAnhCuuHo(HinhAnhData).then(() => (true)).catch(()=> (false));
-                })
-            if(result && ID_YeuCau && themHinhAnh)
-                res.json(true);
-            else
-                res.json(false);
-        }
-        catch (e) {
-            res.json({ "KetQua": false });
-        }
-    });
+            var themHinhAnh = await UserModel.themHinhAnhCuuHo(HinhAnhData);
+        })
+        res.json({ "KetQua": true });
+    }
+    catch (e) {
+        res.json({ "KetQua": false });
+    }
+});
 module.exports = router;
