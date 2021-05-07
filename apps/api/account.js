@@ -192,22 +192,22 @@ router.route("/danh-sach-yeu-cau")
         }
     });
 router.post("/them-yeu-cau", upload.array('photo', 3), async function (req, res) {
-    var data = req.body;
+    var data = req.body[0].KetQua;
     let file = req.files;
 
     try {
         var YeuCauData = {
-            ID_TaiKhoan: data[0].ID_TaiKhoan,
-            ID_DoiTac: data[0].ID_DoiTac,
-            LiDoCuuHo: data[0].LiDoCuuHo,
-            MoTaYeuCau: data[0].MoTaYeuCau,
-            DiaDiemCuuHo: data[0].DiaDiemCuuHo,
-            ViDo: data[0].ViDo,
-            KinhDo: data[0].KinhDo
+            ID_TaiKhoan: data.ID_TaiKhoan,
+            ID_DoiTac: data.ID_DoiTac,
+            LiDoCuuHo: data.LiDoCuuHo,
+            MoTaYeuCau: data.MoTaYeuCau,
+            DiaDiemCuuHo: data.DiaDiemCuuHo,
+            ViDo: data.ViDo,
+            KinhDo: data.KinhDo
         }
 
         var result = await UserModel.themYeuCauCuuHo(YeuCauData);
-        var ID_YeuCau = await UserModel.getIDYeuCau(data[0].ID_TaiKhoan, data[0].ID_DoiTac).then((data) => data);
+        var ID_YeuCau = await UserModel.getIDYeuCau(data.ID_TaiKhoan, data.ID_DoiTac).then((data) => data);
 
         file.map(async (item) => {
             var HinhAnhData = {
