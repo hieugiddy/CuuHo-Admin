@@ -81,7 +81,7 @@ function dsYeuCauCuuHo(ID_TaiKhoan, TrangThai) {
     if (ID_TaiKhoan && TrangThai) {
         var TrangThai = TrangThai.split(',');
         var defer = q.defer();
-        conn.query("SELECT * FROM YeuCauCuuHo, doitac WHERE YeuCauCuuHo.ID_DoiTac=doitac.ID_DoiTac AND YeuCauCuuHo.TrangThai IN (?) AND ID_TaiKhoan=? ORDER BY ThoiGian DESC",[TrangThai,ID_TaiKhoan], function (error, results) {
+        conn.query("SELECT ID_YeuCau, LiDoCuuHo, MoTaYeuCau, DiaDiemCuuHo, ThoiGian, YeuCauCuuHo.TrangThai FROM YeuCauCuuHo, doitac WHERE YeuCauCuuHo.ID_DoiTac=doitac.ID_DoiTac AND YeuCauCuuHo.TrangThai IN (?) AND ID_TaiKhoan=? ORDER BY ThoiGian DESC",[TrangThai,ID_TaiKhoan], function (error, results) {
             if (error)
                 defer.reject(error);
             else
