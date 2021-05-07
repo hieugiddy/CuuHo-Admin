@@ -191,9 +191,9 @@ router.route("/danh-sach-yeu-cau")
             res.json({ "Messenger": e });
         }
     });
-router.route("/them-yeu-cau")
-    .post(async function (req, res) {
-        var data = req.body;
+router.post("/them-yeu-cau", upload.array('photo', 3), async function (req, res) {
+        var data = req.body.DT;
+        let file = req.files;
 
         try {
             var YeuCauData = {
@@ -205,8 +205,8 @@ router.route("/them-yeu-cau")
                 ViDo: data.ViDo,
                 KinhDo: data.KinhDo
             }
-            
-            var result = await UserModel.themYeuCauCuuHo(YeuCauData).then((data) => data);
+            res.json({data, file});
+            /* var result = await UserModel.themYeuCauCuuHo(YeuCauData).then((data) => data);
             var ID_YeuCau = await UserModel.getIDYeuCau(data.ID_TaiKhoan, data.ID_DoiTac).then((data) => data);
             var HinhAnhData = {
                 LinkAnh: data.LinkAnh,
@@ -215,7 +215,7 @@ router.route("/them-yeu-cau")
             var themHinhAnh = UserModel.themHinhAnhCuuHo(HinhAnhData);
             themHinhAnh.then(data => {
                 res.json({ "KetQua": true });
-            })
+            }) */
         }
         catch (e) {
             res.json({ "KetQua": false });
