@@ -209,13 +209,13 @@ router.post("/them-yeu-cau", upload.array('photo', 3), async function (req, res)
         var result = await UserModel.themYeuCauCuuHo(YeuCauData);
         var ID_YeuCau = await UserModel.getIDYeuCau(data.ID_TaiKhoan, data.ID_DoiTac).then((data) => data);
 
-        file.map(async (item) => {
+        let chenAnh = await Promise.all(file.map(async (item) => {
             var HinhAnhData = {
                 LinkAnh: config.get('server.link') + '/static/img/' + item.filename,
                 ID_YeuCau: ID_YeuCau[0].ID_YeuCau
             }
             var themHinhAnh = await UserModel.themHinhAnhCuuHo(HinhAnhData);
-        })
+        }));
         res.json({ "KetQua": true });
     }
     catch (e) {
