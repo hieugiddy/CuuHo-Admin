@@ -192,7 +192,7 @@ router.route("/danh-sach-yeu-cau")
         }
     });
 router.post("/them-yeu-cau", upload.array('photo', 3), async function (req, res) {
-        var data = req.body.DT;
+        var data = req.body;
         let file = req.files;
 
         try {
@@ -205,17 +205,23 @@ router.post("/them-yeu-cau", upload.array('photo', 3), async function (req, res)
                 ViDo: data.ViDo,
                 KinhDo: data.KinhDo
             }
-            res.json({data, file});
-            /* var result = await UserModel.themYeuCauCuuHo(YeuCauData).then((data) => data);
-            var ID_YeuCau = await UserModel.getIDYeuCau(data.ID_TaiKhoan, data.ID_DoiTac).then((data) => data);
-            var HinhAnhData = {
-                LinkAnh: data.LinkAnh,
-                ID_YeuCau: ID_YeuCau
-            }
-            var themHinhAnh = UserModel.themHinhAnhCuuHo(HinhAnhData);
-            themHinhAnh.then(data => {
-                res.json({ "KetQua": true });
-            }) */
+
+            var result = await UserModel.themYeuCauCuuHo(YeuCauData).then(() => (true)).catch(()=> (false));
+            if(result)
+                var ID_YeuCau = await UserModel.getIDYeuCau(data.ID_TaiKhoan, data.ID_DoiTac).then((data) => data).catch(()=> (false));
+            
+            if(result && ID_YeuCau)
+                file[0].map((item) => {
+                    var HinhAnhData = {
+                        LinkAnh: config.get('server.link') + '/static/img/' + item.filename,
+                        ID_YeuCau: ID_YeuCau
+                    }
+                    var themHinhAnh = await UserModel.themHinhAnhCuuHo(HinhAnhData).then(() => (true)).catch(()=> (false));
+                })
+            if(result && ID_YeuCau && themHinhAnh)
+                res.json(true);
+            else
+                res.json(false);
         }
         catch (e) {
             res.json({ "KetQua": false });
