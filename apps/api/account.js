@@ -191,7 +191,7 @@ router.route("/danh-sach-yeu-cau")
             res.json({ "Messenger": e });
         }
     });
-router.post("/them-yeu-cau", upload.array('photo', 3), async function (req, res) {
+router.post("/them-yeu-cau", upload.array('photo',20), async function (req, res) {
     var data = req.body;
     let file = req.files;
 
