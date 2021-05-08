@@ -216,7 +216,7 @@ router.post("/them-yeu-cau", upload.array('photo', 3), async function (req, res)
             }
             var themHinhAnh = await UserModel.themHinhAnhCuuHo(HinhAnhData);
         }));
-        res.json({ "ID_YeuCau": ID_YeuCau[0].ID_YeuCau });
+        res.json(ID_YeuCau[0].ID_YeuCau);
     }
     catch (e) {
         res.json({ "KetQua": false });
