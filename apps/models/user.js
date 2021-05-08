@@ -81,7 +81,7 @@ function dsYeuCauCuuHo(ID_TaiKhoan, TrangThai) {
     if (ID_TaiKhoan && TrangThai) {
         var TrangThai = TrangThai.split(',');
         var defer = q.defer();
-        conn.query("SELECT ID_YeuCau, LiDoCuuHo, MoTaYeuCau, DiaDiemCuuHo, ThoiGian, YeuCauCuuHo.TrangThai FROM YeuCauCuuHo, doitac WHERE YeuCauCuuHo.ID_DoiTac=doitac.ID_DoiTac AND YeuCauCuuHo.TrangThai IN (?) AND ID_TaiKhoan=? ORDER BY ThoiGian DESC",[TrangThai,ID_TaiKhoan], function (error, results) {
+        conn.query("SELECT ID_YeuCau, LiDoCuuHo, MoTaYeuCau, DiaDiemCuuHo, ThoiGian, TrangThai FROM YeuCauCuuHo WHERE TrangThai IN (?) AND ID_TaiKhoan=? ORDER BY ThoiGian DESC",[TrangThai,ID_TaiKhoan], function (error, results) {
             if (error)
                 defer.reject(error);
             else
@@ -93,6 +93,7 @@ function dsYeuCauCuuHo(ID_TaiKhoan, TrangThai) {
 
     return false;
 }
+
 function dsHinhAnhYeuCau(ID_YeuCau) {
     if (ID_YeuCau) {
         var defer = q.defer();
@@ -123,10 +124,10 @@ function themYeuCauCuuHo(data) {
 
     return false;
 }
-function getIDYeuCau(ID_TaiKhoan, ID_DoiTac) {
-    if (ID_TaiKhoan && ID_DoiTac) {
+function getIDYeuCau(ID_TaiKhoan, ID_ChiNhanh) {
+    if (ID_TaiKhoan && ID_ChiNhanh) {
         var defer = q.defer();
-        conn.query("select ID_YeuCau from YeuCauCuuHo where ? order by ThoiGian DESC limit 1",[ID_TaiKhoan, ID_DoiTac], function (error, results) {
+        conn.query("select ID_YeuCau from YeuCauCuuHo where ? order by ThoiGian DESC limit 1",[ID_TaiKhoan, ID_ChiNhanh], function (error, results) {
             if (error)
                 defer.reject(error);
             else
@@ -153,6 +154,51 @@ function themHinhAnhCuuHo(data) {
 
     return false;
 }
+function getChiTietYeuCauCuuHo(ID_YeuCau) {
+    if (ID_YeuCau) {
+        var defer = q.defer();
+        conn.query("SELECT LiDoCuuHo, MoTaYeuCau, DiaDiemCuuHo, TongChiPhi, MoTaChiPhi, ThoiGian, YeuCauCuuHo.TrangThai, TenDoanhNghiep, NgayHoatDong, Website, GioiThieuNgan FROM YeuCauCuuHo, doitac WHERE YeuCauCuuHo.ID_DoiTac=doitac.ID_DoiTac AND ID_YeuCau=?",[ID_YeuCau], function (error, results) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
+function setTrangThaiYeuCau(ID_YeuCau, TrangThai) {
+    if (ID_YeuCau) {
+        var defer = q.defer();
+        conn.query("UPDATE YeuCauCuuHo SET TrangThai=? WHERE ID_YeuCau=?",[TrangThai,ID_YeuCau], function (error, results) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
+function chiPhiYeuCauCuuHo(ID_YeuCau, MoTaChiPhi, TongChiPhi) {
+    if (ID_YeuCau && MoTaChiPhi && TongChiPhi) {
+        var defer = q.defer();
+        conn.query("UPDATE YeuCauCuuHo SET MoTaChiPhi=?, TongChiPhi=? WHERE ID_YeuCau=?",[MoTaChiPhi,TongChiPhi,ID_YeuCau], function (error, results) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
 module.exports = {
     addUser: addUser,
     xuLiLogin: xuLiLogin,
@@ -163,5 +209,8 @@ module.exports = {
     dsHinhAnhYeuCau: dsHinhAnhYeuCau,
     themYeuCauCuuHo: themYeuCauCuuHo,
     themHinhAnhCuuHo: themHinhAnhCuuHo,
-    getIDYeuCau: getIDYeuCau
+    getIDYeuCau: getIDYeuCau,
+    getChiTietYeuCauCuuHo: getChiTietYeuCauCuuHo,
+    setTrangThaiYeuCau: setTrangThaiYeuCau,
+    chiPhiYeuCauCuuHo: chiPhiYeuCauCuuHo
 }

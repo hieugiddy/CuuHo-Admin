@@ -198,7 +198,7 @@ router.post("/them-yeu-cau", upload.array('photo', 3), async function (req, res)
     try {
         var YeuCauData = {
             ID_TaiKhoan: data.ID_TaiKhoan,
-            ID_DoiTac: data.ID_DoiTac,
+            ID_ChiNhanh: data.ID_ChiNhanh,
             LiDoCuuHo: data.LiDoCuuHo,
             MoTaYeuCau: data.MoTaYeuCau,
             DiaDiemCuuHo: data.DiaDiemCuuHo,
@@ -207,7 +207,7 @@ router.post("/them-yeu-cau", upload.array('photo', 3), async function (req, res)
         }
 
         var result = await UserModel.themYeuCauCuuHo(YeuCauData);
-        var ID_YeuCau = await UserModel.getIDYeuCau(data.ID_TaiKhoan, data.ID_DoiTac).then((data) => data);
+        var ID_YeuCau = await UserModel.getIDYeuCau(data.ID_TaiKhoan, data.ID_ChiNhanh).then((data) => data);
 
         let chenAnh = await Promise.all(file.map(async (item) => {
             var HinhAnhData = {
@@ -220,6 +220,75 @@ router.post("/them-yeu-cau", upload.array('photo', 3), async function (req, res)
     }
     catch (e) {
         res.json({ "KetQua": false });
+    }
+});
+router.route("/chi-tiet-yeu-cau")
+    .post(async function (req, res) {
+        var ID_YeuCau = req.body.ID_YeuCau;
+
+        try {
+            var result = UserModel.getChiTietYeuCauCuuHo(ID_YeuCau);
+            if (!result)
+                res.json({ "Messenger": "Đã có lỗi xảy ra" });
+            else
+                result.then(function (data) {
+                    res.json({ "Messenger": data });
+                }).catch(function (err) {
+                    res.json({ "Messenger": err });
+                })
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+    });
+router.route("/huy-yeu-cau")
+    .post(async function (req, res) {
+        var ID_YeuCau = req.body.ID_YeuCau;
+
+        try {
+            var result = UserModel.setTrangThaiYeuCau(ID_YeuCau, 3);
+            if (!result)
+                res.json({ "Messenger": "Đã có lỗi xảy ra" });
+            else
+                result.then(function (data) {
+                    res.json({ "Messenger": true });
+                }).catch(function (err) {
+                    res.json({ "Messenger": err });
+                })
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+    });
+router.route("/tiep-nhan-yeu-cau")
+    .post(async function (req, res) {
+        var ID_YeuCau = req.body.ID_YeuCau;
+
+        try {
+            var result = UserModel.setTrangThaiYeuCau(ID_YeuCau, 1);
+            if (!result)
+                res.json({ "Messenger": "Đã có lỗi xảy ra" });
+            else
+                result.then(function (data) {
+                    res.json({ "Messenger": true });
+                }).catch(function (err) {
+                    res.json({ "Messenger": err });
+                })
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+    });
+router.post("/hoan-thanh-yeu-cau", async function (req, res) {
+    var {ID_YeuCau, MoTaChiPhi, TongChiPhi} = req.body;
+
+    try {
+        let setTrangThai = await UserModel.setTrangThaiYeuCau(ID_YeuCau, 2);
+        let chiPhi = await UserModel.chiPhiYeuCauCuuHo(ID_YeuCau, MoTaChiPhi, TongChiPhi);
+        res.json(true);
+    }
+    catch (e) {
+        res.json(false);
     }
 });
 module.exports = router;
