@@ -232,7 +232,7 @@ router.route("/chi-tiet-yeu-cau")
                 res.json({ "Messenger": "Đã có lỗi xảy ra" });
             else
                 result.then(function (data) {
-                    res.json({ "Messenger": data });
+                    res.json(data[0]);
                 }).catch(function (err) {
                     res.json({ "Messenger": err });
                 })
