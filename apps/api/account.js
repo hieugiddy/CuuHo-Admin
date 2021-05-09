@@ -190,7 +190,7 @@ router.route("/danh-sach-yeu-cau")
             res.json({ "Messenger": e });
         }
     });
-router.post("/them-yeu-cau", upload.array('photo',20), async function (req, res) {
+router.post("/them-yeu-cau", upload.array('photo', 20), async function (req, res) {
     var data = req.body;
     let file = req.files;
 
@@ -279,7 +279,7 @@ router.route("/tiep-nhan-yeu-cau")
         }
     });
 router.post("/hoan-thanh-yeu-cau", async function (req, res) {
-    var {ID_YeuCau, MoTaChiPhi, TongChiPhi} = req.body;
+    var { ID_YeuCau, MoTaChiPhi, TongChiPhi } = req.body;
 
     try {
         let setTrangThai = await UserModel.setTrangThaiYeuCau(ID_YeuCau, 2);
@@ -291,7 +291,7 @@ router.post("/hoan-thanh-yeu-cau", async function (req, res) {
     }
 });
 router.post("/hinh-anh-yeu-cau", async function (req, res) {
-    var {ID_YeuCau} = req.body;
+    var { ID_YeuCau } = req.body;
 
     try {
         let result = await UserModel.dsHinhAnhYeuCau(ID_YeuCau);
@@ -311,9 +311,9 @@ router.post("/danh-gia", function (req, res) {
 
     try {
         let result = UserModel.addDanhGia(data);
-        result.then(()=>{
+        result.then(() => {
             res.json(true)
-        }).catch((e)=>{
+        }).catch((e) => {
             res.json(e)
         })
     }
@@ -321,4 +321,23 @@ router.post("/danh-gia", function (req, res) {
         res.json(false);
     }
 });
+router.route("/chi-tiet-danh-gia")
+    .post(function (req, res) {
+
+        try {
+            var result = UserModel.getChiTietDanhGia(req.body.ID_DanhGia);
+            if (!result)
+                res.json({ "Messenger": "Đã có lỗi xảy ra" });
+            else
+                result.then(function (data) {
+                    res.json(data[0]);
+                }).catch(function (err) {
+                    res.json({ "Messenger": err });
+                })
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+
+    });
 module.exports = router;

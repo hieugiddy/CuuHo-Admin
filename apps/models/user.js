@@ -214,6 +214,21 @@ function addDanhGia(data) {
 
     return false;
 }
+function getChiTietDanhGia(idDanhGia){
+    if (idDanhGia) {
+        var defer = q.defer();
+        conn.query('SELECT * FROM danhgia WHERE ID_DanhGia=?', [idDanhGia], function (error, results, fields) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
 module.exports = {
     addUser: addUser,
     xuLiLogin: xuLiLogin,
@@ -228,5 +243,6 @@ module.exports = {
     getChiTietYeuCauCuuHo: getChiTietYeuCauCuuHo,
     setTrangThaiYeuCau: setTrangThaiYeuCau,
     chiPhiYeuCauCuuHo: chiPhiYeuCauCuuHo,
-    addDanhGia: addDanhGia
+    addDanhGia: addDanhGia,
+    getChiTietDanhGia: getChiTietDanhGia
 }
