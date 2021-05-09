@@ -157,7 +157,7 @@ function themHinhAnhCuuHo(data) {
 function getChiTietYeuCauCuuHo(ID_YeuCau) {
     if (ID_YeuCau) {
         var defer = q.defer();
-        conn.query("SELECT LiDoCuuHo, MoTaYeuCau, DiaDiemCuuHo, TongChiPhi, MoTaChiPhi, ThoiGian, YeuCauCuuHo.TrangThai, TenDoanhNghiep, chinhanh.NgayHoatDong, Website, TenChiNhanh, DiaChi, chinhanh.ViDo, chinhanh.KinhDo, YeuCauCuuHo.ViDo, YeuCauCuuHo.KinhDo FROM YeuCauCuuHo, doitac, chinhanh WHERE YeuCauCuuHo.ID_ChiNhanh=chinhanh.ID_ChiNhanh AND chinhanh.ID_DoiTac=doitac.ID_DoiTac AND ID_YeuCau=?",[ID_YeuCau], function (error, results) {
+        conn.query("SELECT LiDoCuuHo, MoTaYeuCau, DiaDiemCuuHo, TongChiPhi, MoTaChiPhi, ThoiGian, YeuCauCuuHo.TrangThai, TenDoanhNghiep, chinhanh.NgayHoatDong, Website, TenChiNhanh, DiaChi, chinhanh.ViDo, chinhanh.KinhDo, YeuCauCuuHo.ViDo, YeuCauCuuHo.KinhDo, YeuCauCuuHo.ID_TaiKhoan FROM YeuCauCuuHo, doitac, chinhanh WHERE YeuCauCuuHo.ID_ChiNhanh=chinhanh.ID_ChiNhanh AND chinhanh.ID_DoiTac=doitac.ID_DoiTac AND ID_YeuCau=?",[ID_YeuCau], function (error, results) {
             if (error)
                 defer.reject(error);
             else
