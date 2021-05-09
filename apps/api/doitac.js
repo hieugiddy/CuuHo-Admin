@@ -118,8 +118,8 @@ router.route("/chitietuudai/:id")
                 res.json({ "Messenger": "Đã có lỗi xảy ra" });
             else
                 result.then(function (dt) {
-                    var batDau=dateFormat(new Date(dt[0].TgBatDau), "dd/mm/yyyy");
-                    var ketThuc=dateFormat(new Date(dt[0].TgKetThuc), "dd/mm/yyyy");
+                    var batDau = dateFormat(new Date(dt[0].TgBatDau), "dd/mm/yyyy");
+                    var ketThuc = dateFormat(new Date(dt[0].TgKetThuc), "dd/mm/yyyy");
                     res.render("chitietuudai", {
                         NoiDung: dt[0].NoiDungUuDai.replace(/(\r\n|\n|\r)/gm, "").trim(),
                         BatDau: batDau,
@@ -129,6 +129,36 @@ router.route("/chitietuudai/:id")
                 }).catch(function (err) {
                     res.json({ "Messenger": err });
                 })
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+    });
+router.route("/danh-sach-yeu-cau")
+    .post(async function (req, res) {
+        var user = req.body;
+
+        try {
+            var doiTac = await DoiTacModel.getDoiTacWithTK(user.ID_TaiKhoan).then((data) => data);
+            
+            let dsChiNhanhDoiTac = await Promise.all(doiTac.map(async (item) => {
+                let dsChiNhanh = await DoiTacModel.getDsChiNhanh(item.ID_DoiTac)
+                let dsChiNhanhVaYeuCauCuuHo = await Promise.all(dsChiNhanh.map(async (item) => {
+                    let dsYC = await DoiTacModel.dsYeuCauCuuHo(item.ID_ChiNhanh, user.TrangThai);
+
+                    return ({
+                        ...item,
+                        YeuCauCuuHo: dsYC,
+                    })
+                })).then(data => data);
+
+                return ({
+                    ...item,
+                    ChiNhanh: dsChiNhanhVaYeuCauCuuHo,
+                })
+            })).then(data => data);
+
+            res.json(dsChiNhanhDoiTac[0]);
         }
         catch (e) {
             res.json({ "Messenger": e });

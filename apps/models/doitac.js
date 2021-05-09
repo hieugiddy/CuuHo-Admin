@@ -161,6 +161,36 @@ function getDanhGia(idChiNhanh){
 
     return false;
 }
+function getDoiTacWithTK(ID_TaiKhoan) {
+    if (ID_TaiKhoan) {
+        var defer = q.defer();
+        conn.query("SELECT * FROM doitac WHERE IDTK=? ",[ID_TaiKhoan], function (error, results) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
+function dsYeuCauCuuHo(ID_ChiNhanh, TrangThai) {
+    if (ID_ChiNhanh) {
+        var defer = q.defer();
+        conn.query("SELECT ID_YeuCau, LiDoCuuHo, MoTaYeuCau, DiaDiemCuuHo, ThoiGian, TrangThai FROM YeuCauCuuHo WHERE TrangThai=? AND ID_ChiNhanh=? ORDER BY ThoiGian DESC",[TrangThai,ID_ChiNhanh], function (error, results) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
 module.exports = {
     getDsDoiTac: getDsDoiTac,
     getDsChiNhanh: getDsChiNhanh,
@@ -171,5 +201,7 @@ module.exports = {
     getUuDai: getUuDai,
     getDanhGia: getDanhGia,
     getChiTietDichVu: getChiTietDichVu,
-    getChiTietUuDai: getChiTietUuDai
+    getChiTietUuDai: getChiTietUuDai,
+    getDoiTacWithTK: getDoiTacWithTK,
+    dsYeuCauCuuHo: dsYeuCauCuuHo
 }
