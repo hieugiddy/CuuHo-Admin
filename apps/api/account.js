@@ -40,7 +40,6 @@ router.route("/dang-ky")
                 SoDienThoai: user.telephone,
                 NgaySinh: ngSinh,
                 GioiTinh: gTinh,
-                QuocTich: qTich,
             }
             var result = UserModel.addUser(users);
 
