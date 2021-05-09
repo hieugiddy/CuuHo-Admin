@@ -229,6 +229,21 @@ function getChiTietDanhGia(idTK,ID_ChiNhanh){
 
     return false;
 }
+function chinhSuaDanhGia(Diem,NoiDung,ID_DanhGia){
+    if (NoiDung && ID_DanhGia) {
+        var defer = q.defer();
+        conn.query('UPDATE danhgia SET Diem=?, NoiDung=? WHERE ID_DanhGia=?', [Diem,NoiDung,ID_DanhGia], function (error, results, fields) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
 module.exports = {
     addUser: addUser,
     xuLiLogin: xuLiLogin,
@@ -244,5 +259,6 @@ module.exports = {
     setTrangThaiYeuCau: setTrangThaiYeuCau,
     chiPhiYeuCauCuuHo: chiPhiYeuCauCuuHo,
     addDanhGia: addDanhGia,
-    getChiTietDanhGia: getChiTietDanhGia
+    getChiTietDanhGia: getChiTietDanhGia,
+    chinhSuaDanhGia: chinhSuaDanhGia
 }

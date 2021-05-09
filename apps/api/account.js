@@ -325,12 +325,30 @@ router.route("/chi-tiet-danh-gia")
     .post(function (req, res) {
         try {
             var result = UserModel.getChiTietDanhGia(req.body.ID_TaiKhoan, req.body.ID_ChiNhanh);
-            
             if (!result)
                 res.json({ "Messenger": "Đã có lỗi xảy ra" });
             else
-                result.then(function (data) {
+                result.then((data) => {
                     res.json(data);
+                }).catch(function (err) {
+                    res.json({ "Messenger": err });
+                })
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+
+    });
+router.route("/chinh-sua-danh-gia")
+    .post(function (req, res) {
+        var {Diem,NoiDung,ID_DanhGia} = req.body;
+        try {
+            var result = UserModel.chinhSuaDanhGia(Diem,NoiDung,ID_DanhGia);
+            if (!result)
+                res.json({ "Messenger": "Đã có lỗi xảy ra" });
+            else
+                result.then((data) => {
+                    res.json(true);
                 }).catch(function (err) {
                     res.json({ "Messenger": err });
                 })
