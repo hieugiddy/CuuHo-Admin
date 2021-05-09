@@ -214,10 +214,10 @@ function addDanhGia(data) {
 
     return false;
 }
-function getChiTietDanhGia(idDanhGia){
-    if (idDanhGia) {
+function getChiTietDanhGia(idTK,ID_ChiNhanh){
+    if (idTK && ID_ChiNhanh) {
         var defer = q.defer();
-        conn.query('SELECT * FROM danhgia WHERE ID_DanhGia=?', [idDanhGia], function (error, results, fields) {
+        conn.query('SELECT * FROM danhgia WHERE ID_ChiNhanh=? and ID_TaiKhoan=?', [ID_ChiNhanh, idTK], function (error, results, fields) {
             if (error)
                 defer.reject(error);
             else

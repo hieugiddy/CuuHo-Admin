@@ -323,14 +323,14 @@ router.post("/danh-gia", function (req, res) {
 });
 router.route("/chi-tiet-danh-gia")
     .post(function (req, res) {
-
         try {
-            var result = UserModel.getChiTietDanhGia(req.body.ID_DanhGia);
+            var result = UserModel.getChiTietDanhGia(req.body.ID_TaiKhoan, req.body.ID_ChiNhanh);
+            
             if (!result)
                 res.json({ "Messenger": "Đã có lỗi xảy ra" });
             else
                 result.then(function (data) {
-                    res.json(data[0]);
+                    res.json(data);
                 }).catch(function (err) {
                     res.json({ "Messenger": err });
                 })
