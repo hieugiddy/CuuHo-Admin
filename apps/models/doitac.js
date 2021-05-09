@@ -149,7 +149,7 @@ function getChiTietUuDai(idUuDai){
 function getDanhGia(idChiNhanh){
     if (idChiNhanh) {
         var defer = q.defer();
-        conn.query('SELECT * FROM danhgia, taikhoan WHERE danhgia.ID_TaiKhoan=taikhoan.ID_TaiKhoan AND ID_ChiNhanh=?', [idChiNhanh], function (error, results, fields) {
+        conn.query('SELECT * FROM danhgia, taikhoan WHERE danhgia.ID_TaiKhoan=taikhoan.ID_TaiKhoan AND danhgia.ID_ChiNhanh=?', [idChiNhanh], function (error, results, fields) {
             if (error)
                 defer.reject(error);
             else
