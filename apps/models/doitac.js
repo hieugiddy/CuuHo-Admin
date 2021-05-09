@@ -2,10 +2,11 @@ var q = require("q");
 var db = require("../common/DB");
 var conn = db.getConnection();
 
+
 function getDsDoiTac(linhvuc) {
     if (linhvuc) {
         var defer = q.defer();
-        if(linhvuc=="all")
+        if (linhvuc == "all")
             conn.query('SELECT * FROM doitac, loaihinhkinhdoanh WHERE doitac.IDLoaiHinh=loaihinhkinhdoanh.IDLoaiHinh and TrangThai=1', function (error, results, fields) {
                 if (error)
                     defer.reject(error);
@@ -13,7 +14,7 @@ function getDsDoiTac(linhvuc) {
                     defer.resolve(results);
             });
         else
-            conn.query('SELECT * FROM doitac, loaihinhkinhdoanh WHERE doitac.IDLoaiHinh=loaihinhkinhdoanh.IDLoaiHinh and TrangThai=1 AND doitac.ID_DoiTac IN (SELECT ID_DoiTac FROM chitietlinhvuckinhdoanh WHERE ID_LinhVuc=?)',linhvuc, function (error, results, fields) {
+            conn.query('SELECT * FROM doitac, loaihinhkinhdoanh WHERE doitac.IDLoaiHinh=loaihinhkinhdoanh.IDLoaiHinh and TrangThai=1 AND doitac.ID_DoiTac IN (SELECT ID_DoiTac FROM chitietlinhvuckinhdoanh WHERE ID_LinhVuc=?)', linhvuc, function (error, results, fields) {
                 if (error)
                     defer.reject(error);
                 else
@@ -41,7 +42,7 @@ function getDsChiNhanh(idDT) {
 
     return false;
 }
-function getDiemDanhGia(idChiNhanh){
+function getDiemDanhGia(idChiNhanh) {
     if (idChiNhanh) {
         var defer = q.defer();
         conn.query('SELECT AVG(Diem) AS Diem FROM danhgia WHERE ID_ChiNhanh=?', idChiNhanh, function (error, results, fields) {
@@ -56,7 +57,7 @@ function getDiemDanhGia(idChiNhanh){
 
     return false;
 }
-function getLinhVucKinhDoanh(idDoiTac){
+function getLinhVucKinhDoanh(idDoiTac) {
     if (idDoiTac) {
         var defer = q.defer();
         conn.query('SELECT lvkd.ID_LinhVuc, TenLinhVuc FROM linhvuckinhdoanh as lvkd, chitietlinhvuckinhdoanh as ctlvkd WHERE lvkd.ID_LinhVuc=ctlvkd.ID_LinhVuc and ID_DoiTac=?', idDoiTac, function (error, results, fields) {
@@ -71,10 +72,10 @@ function getLinhVucKinhDoanh(idDoiTac){
 
     return false;
 }
-function getHinhAnh(idDoiTac, loai, limit){
+function getHinhAnh(idDoiTac, loai, limit) {
     if (idDoiTac) {
         var defer = q.defer();
-        conn.query('SELECT * FROM hinhanhdoitac WHERE ID_DoiTac=? AND LoaiAnh=?', [idDoiTac,loai], function (error, results, fields) {
+        conn.query('SELECT * FROM hinhanhdoitac WHERE ID_DoiTac=? AND LoaiAnh=?', [idDoiTac, loai], function (error, results, fields) {
             if (error)
                 defer.reject(error);
             else
@@ -86,7 +87,7 @@ function getHinhAnh(idDoiTac, loai, limit){
 
     return false;
 }
-function getDichVu(idChiNhanh){
+function getDichVu(idChiNhanh) {
     if (idChiNhanh) {
         var defer = q.defer();
         conn.query('SELECT * FROM dichvu, chitietdichvu WHERE dichvu.ID_DichVu=chitietdichvu.ID_DichVu AND ID_ChiNhanh=?', [idChiNhanh], function (error, results, fields) {
@@ -101,7 +102,7 @@ function getDichVu(idChiNhanh){
 
     return false;
 }
-function getChiTietDichVu(idDichVu){
+function getChiTietDichVu(idDichVu) {
     if (idDichVu) {
         var defer = q.defer();
         conn.query('SELECT * FROM dichvu WHERE ID_DichVu=?', [idDichVu], function (error, results, fields) {
@@ -116,7 +117,7 @@ function getChiTietDichVu(idDichVu){
 
     return false;
 }
-function getUuDai(idDoiTac){
+function getUuDai(idDoiTac) {
     if (idDoiTac) {
         var defer = q.defer();
         conn.query('SELECT * FROM uudai WHERE TgKetThuc>=NOW() AND ID_DoiTac=?', [idDoiTac], function (error, results, fields) {
@@ -131,7 +132,7 @@ function getUuDai(idDoiTac){
 
     return false;
 }
-function getChiTietUuDai(idUuDai){
+function getChiTietUuDai(idUuDai) {
     if (idUuDai) {
         var defer = q.defer();
         conn.query('SELECT * FROM uudai WHERE ID_UuDai=?', [idUuDai], function (error, results, fields) {
@@ -146,7 +147,7 @@ function getChiTietUuDai(idUuDai){
 
     return false;
 }
-function getDanhGia(idChiNhanh){
+function getDanhGia(idChiNhanh) {
     if (idChiNhanh) {
         var defer = q.defer();
         conn.query('SELECT * FROM danhgia, taikhoan WHERE danhgia.ID_TaiKhoan=taikhoan.ID_TaiKhoan AND danhgia.ID_ChiNhanh=?', [idChiNhanh], function (error, results, fields) {
@@ -161,36 +162,18 @@ function getDanhGia(idChiNhanh){
 
     return false;
 }
-function getDoiTacWithTK(ID_TaiKhoan) {
-    if (ID_TaiKhoan) {
-        var defer = q.defer();
-        conn.query("SELECT * FROM doitac WHERE IDTK=? ",[ID_TaiKhoan], function (error, results) {
-            if (error)
-                defer.reject(error);
-            else
-                defer.resolve(results);
-        });
 
-        return defer.promise;
-    }
+function dsYeuCauCuuHo(ID_TaiKhoan, TrangThai) {
+    var TrangThai = TrangThai.split(',');
+    var defer = q.defer();
+    conn.query("SELECT * FROM YeuCauCuuHo WHERE TrangThai IN (?) AND ID_ChiNhanh=(SELECT ID_ChiNhanh FROM taikhoan WHERE ID_TaiKhoan=?) ORDER BY ThoiGian DESC", [TrangThai, ID_TaiKhoan], function (error, results) {
+        if (error)
+            defer.reject(error);
+        else
+            defer.resolve(results);
+    });
 
-    return false;
-}
-function dsYeuCauCuuHo(ID_ChiNhanh, TrangThai) {
-    if (ID_ChiNhanh) {
-        var TrangThai = TrangThai.split(',');
-        var defer = q.defer();
-        conn.query("SELECT * FROM YeuCauCuuHo WHERE TrangThai IN (?) AND ID_ChiNhanh=? ORDER BY ThoiGian DESC",[TrangThai,ID_ChiNhanh], function (error, results) {
-            if (error)
-                defer.reject(error);
-            else
-                defer.resolve(results);
-        });
-
-        return defer.promise;
-    }
-
-    return false;
+    return defer.promise;
 }
 module.exports = {
     getDsDoiTac: getDsDoiTac,
@@ -203,6 +186,5 @@ module.exports = {
     getDanhGia: getDanhGia,
     getChiTietDichVu: getChiTietDichVu,
     getChiTietUuDai: getChiTietUuDai,
-    getDoiTacWithTK: getDoiTacWithTK,
     dsYeuCauCuuHo: dsYeuCauCuuHo
 }
