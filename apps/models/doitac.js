@@ -178,8 +178,9 @@ function getDoiTacWithTK(ID_TaiKhoan) {
 }
 function dsYeuCauCuuHo(ID_ChiNhanh, TrangThai) {
     if (ID_ChiNhanh) {
+        var TrangThai = TrangThai.split(',');
         var defer = q.defer();
-        conn.query("SELECT ID_YeuCau, LiDoCuuHo, MoTaYeuCau, DiaDiemCuuHo, ThoiGian, TrangThai FROM YeuCauCuuHo WHERE TrangThai=? AND ID_ChiNhanh=? ORDER BY ThoiGian DESC",[TrangThai,ID_ChiNhanh], function (error, results) {
+        conn.query("SELECT * FROM YeuCauCuuHo WHERE TrangThai IN (?) AND ID_ChiNhanh=? ORDER BY ThoiGian DESC",[TrangThai,ID_ChiNhanh], function (error, results) {
             if (error)
                 defer.reject(error);
             else
