@@ -175,6 +175,18 @@ function dsYeuCauCuuHo(ID_TaiKhoan, TrangThai) {
 
     return defer.promise;
 }
+
+function getChiTietYeuCau(ID_YeuCau) {
+    var defer = q.defer();
+    conn.query('SELECT * FROM YeuCauCuuHo, taikhoan WHERE YeuCauCuuHo.ID_TaiKhoan=taikhoan.ID_TaiKhoan AND ID_YeuCau=?', [ID_YeuCau], function (error, results, fields) {
+        if (error)
+            defer.reject(error);
+        else
+            defer.resolve(results);
+    });
+
+    return defer.promise;
+}
 module.exports = {
     getDsDoiTac: getDsDoiTac,
     getDsChiNhanh: getDsChiNhanh,
@@ -186,5 +198,6 @@ module.exports = {
     getDanhGia: getDanhGia,
     getChiTietDichVu: getChiTietDichVu,
     getChiTietUuDai: getChiTietUuDai,
-    dsYeuCauCuuHo: dsYeuCauCuuHo
+    dsYeuCauCuuHo: dsYeuCauCuuHo,
+    getChiTietYeuCau: getChiTietYeuCau
 }

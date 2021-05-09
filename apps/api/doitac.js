@@ -136,10 +136,22 @@ router.route("/chitietuudai/:id")
     });
 router.route("/danh-sach-yeu-cau")
     .post(async function (req, res) {
-        var {ID_TaiKhoan, TrangThai} = req.body;
+        var { ID_TaiKhoan, TrangThai } = req.body;
 
         try {
             var result = await DoiTacModel.dsYeuCauCuuHo(ID_TaiKhoan, TrangThai).then((data) => data);
+            res.json(result);
+        }
+        catch (e) {
+            res.json({ "Messenger": e });
+        }
+    });
+router.route("/chi-tiet-yeu-cau")
+    .post(async function (req, res) {
+        var { ID_YeuCau } = req.body;
+
+        try {
+            var result = await DoiTacModel.getChiTietYeuCau(ID_YeuCau).then((data) => data);
             res.json(result);
         }
         catch (e) {
