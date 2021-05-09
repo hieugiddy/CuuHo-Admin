@@ -199,6 +199,21 @@ function chiPhiYeuCauCuuHo(ID_YeuCau, MoTaChiPhi, TongChiPhi) {
 
     return false;
 }
+function addDanhGia(data) {
+    if (data) {
+        var defer = q.defer();
+        conn.query("INSERT INTO danhgia SET ?",[data], function (error, results) {
+            if (error)
+                defer.reject(error);
+            else
+                defer.resolve(results);
+        });
+
+        return defer.promise;
+    }
+
+    return false;
+}
 module.exports = {
     addUser: addUser,
     xuLiLogin: xuLiLogin,
@@ -212,5 +227,6 @@ module.exports = {
     getIDYeuCau: getIDYeuCau,
     getChiTietYeuCauCuuHo: getChiTietYeuCauCuuHo,
     setTrangThaiYeuCau: setTrangThaiYeuCau,
-    chiPhiYeuCauCuuHo: chiPhiYeuCauCuuHo
+    chiPhiYeuCauCuuHo: chiPhiYeuCauCuuHo,
+    addDanhGia: addDanhGia
 }

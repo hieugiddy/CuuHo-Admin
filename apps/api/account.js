@@ -291,4 +291,35 @@ router.post("/hoan-thanh-yeu-cau", async function (req, res) {
         res.json(false);
     }
 });
+router.post("/hinh-anh-yeu-cau", async function (req, res) {
+    var {ID_YeuCau} = req.body;
+
+    try {
+        let result = await UserModel.dsHinhAnhYeuCau(ID_YeuCau);
+        res.json(result);
+    }
+    catch (e) {
+        res.json(false);
+    }
+});
+router.post("/danh-gia", function (req, res) {
+    var data = {
+        NoiDung: req.body.NoiDung,
+        Diem: req.body.Diem,
+        ID_TaiKhoan: ID_TaiKhoan,
+        ID_ChiNhanh: ID_ChiNhanh
+    };
+
+    try {
+        let result = UserModel.addDanhGia(data);
+        result.then(()=>{
+            res.json(true)
+        }).catch((e)=>{
+            res.json(e)
+        })
+    }
+    catch (e) {
+        res.json(false);
+    }
+});
 module.exports = router;
