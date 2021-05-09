@@ -306,8 +306,8 @@ router.post("/danh-gia", function (req, res) {
     var data = {
         NoiDung: req.body.NoiDung,
         Diem: req.body.Diem,
-        ID_TaiKhoan: ID_TaiKhoan,
-        ID_ChiNhanh: ID_ChiNhanh
+        ID_TaiKhoan: req.body.ID_TaiKhoan,
+        ID_ChiNhanh: req.body.ID_ChiNhanh
     };
 
     try {
