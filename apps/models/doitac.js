@@ -163,7 +163,7 @@ function getDanhGia(idChiNhanh) {
     return false;
 }
 
-function dsyeucaucuuho(ID_TaiKhoan, TrangThai) {
+function dsYeuCauCuuHo(ID_TaiKhoan, TrangThai) {
     var TrangThai = TrangThai.split(',');
     var defer = q.defer();
     conn.query("SELECT * FROM yeucaucuuho WHERE TrangThai IN (?) AND ID_ChiNhanh=(SELECT ID_ChiNhanh FROM taikhoan WHERE ID_TaiKhoan=?) ORDER BY ThoiGian DESC", [TrangThai, ID_TaiKhoan], function (error, results) {
@@ -198,6 +198,6 @@ module.exports = {
     getDanhGia: getDanhGia,
     getChiTietDichVu: getChiTietDichVu,
     getChiTietUuDai: getChiTietUuDai,
-    dsyeucaucuuho: dsyeucaucuuho,
+    dsYeuCauCuuHo: dsYeuCauCuuHo,
     getChiTietYeuCau: getChiTietYeuCau
 }
