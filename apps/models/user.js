@@ -81,7 +81,7 @@ function dsYeuCauCuuHo(ID_TaiKhoan, TrangThai) {
     if (ID_TaiKhoan && TrangThai) {
         var TrangThai = TrangThai.split(',');
         var defer = q.defer();
-        conn.query("SELECT ID_YeuCau, LiDoCuuHo, MoTaYeuCau, DiaDiemCuuHo, ThoiGian, TrangThai FROM YeuCauCuuHo WHERE TrangThai IN (?) AND ID_TaiKhoan=? ORDER BY ThoiGian DESC",[TrangThai,ID_TaiKhoan], function (error, results) {
+        conn.query("SELECT ID_YeuCau, LiDoCuuHo, MoTaYeuCau, DiaDiemCuuHo, ThoiGian, TrangThai FROM yeucaucuuho WHERE TrangThai IN (?) AND ID_TaiKhoan=? ORDER BY ThoiGian DESC",[TrangThai,ID_TaiKhoan], function (error, results) {
             if (error)
                 defer.reject(error);
             else
@@ -97,7 +97,7 @@ function dsYeuCauCuuHo(ID_TaiKhoan, TrangThai) {
 function dsHinhAnhYeuCau(ID_YeuCau) {
     if (ID_YeuCau) {
         var defer = q.defer();
-        conn.query("SELECT * FROM HinhAnhCuuHo WHERE ID_YeuCau =?",[ID_YeuCau], function (error, results) {
+        conn.query("SELECT * FROM hinhanhcuuho WHERE ID_YeuCau =?",[ID_YeuCau], function (error, results) {
             if (error)
                 defer.reject(error);
             else
@@ -112,7 +112,7 @@ function dsHinhAnhYeuCau(ID_YeuCau) {
 function themYeuCauCuuHo(data) {
     if (data) {
         var defer = q.defer();
-        conn.query("INSERT INTO YeuCauCuuHo SET ?",[data], function (error, results) {
+        conn.query("INSERT INTO yeucaucuuho SET ?",[data], function (error, results) {
             if (error)
                 defer.reject(error);
             else
@@ -127,7 +127,7 @@ function themYeuCauCuuHo(data) {
 function getIDYeuCau(ID_TaiKhoan, ID_ChiNhanh) {
     if (ID_TaiKhoan && ID_ChiNhanh) {
         var defer = q.defer();
-        conn.query("select ID_YeuCau from YeuCauCuuHo where ? order by ThoiGian DESC limit 1",[ID_TaiKhoan, ID_ChiNhanh], function (error, results) {
+        conn.query("select ID_YeuCau from yeucaucuuho where ? order by ThoiGian DESC limit 1",[ID_TaiKhoan, ID_ChiNhanh], function (error, results) {
             if (error)
                 defer.reject(error);
             else
@@ -142,7 +142,7 @@ function getIDYeuCau(ID_TaiKhoan, ID_ChiNhanh) {
 function themHinhAnhCuuHo(data) {
     if (data) {
         var defer = q.defer();
-        conn.query("INSERT INTO HinhAnhCuuHo SET ?",[data], function (error, results) {
+        conn.query("INSERT INTO hinhanhcuuho SET ?",[data], function (error, results) {
             if (error)
                 defer.reject(error);
             else
@@ -157,7 +157,7 @@ function themHinhAnhCuuHo(data) {
 function getChiTietYeuCauCuuHo(ID_YeuCau) {
     if (ID_YeuCau) {
         var defer = q.defer();
-        conn.query("SELECT LiDoCuuHo, MoTaYeuCau, DiaDiemCuuHo, TongChiPhi, MoTaChiPhi, ThoiGian, YeuCauCuuHo.TrangThai, TenDoanhNghiep, chinhanh.NgayHoatDong, Website, TenChiNhanh, DiaChi, chinhanh.ViDo, chinhanh.KinhDo, YeuCauCuuHo.ViDo, YeuCauCuuHo.KinhDo, YeuCauCuuHo.ID_TaiKhoan, YeuCauCuuHo.ID_ChiNhanh FROM YeuCauCuuHo, doitac, chinhanh WHERE YeuCauCuuHo.ID_ChiNhanh=chinhanh.ID_ChiNhanh AND chinhanh.ID_DoiTac=doitac.ID_DoiTac AND ID_YeuCau=?",[ID_YeuCau], function (error, results) {
+        conn.query("SELECT LiDoCuuHo, MoTaYeuCau, DiaDiemCuuHo, TongChiPhi, MoTaChiPhi, ThoiGian, YeuCauCuuHo.TrangThai, TenDoanhNghiep, chinhanh.NgayHoatDong, Website, TenChiNhanh, DiaChi, chinhanh.ViDo, chinhanh.KinhDo, yeucaucuuho.ViDo, yeucaucuuho.KinhDo, yeucaucuuho.ID_TaiKhoan, yeucaucuuho.ID_ChiNhanh FROM yeucaucuuho, doitac, chinhanh WHERE yeucaucuuho.ID_ChiNhanh=chinhanh.ID_ChiNhanh AND chinhanh.ID_DoiTac=doitac.ID_DoiTac AND ID_YeuCau=?",[ID_YeuCau], function (error, results) {
             if (error)
                 defer.reject(error);
             else
@@ -172,7 +172,7 @@ function getChiTietYeuCauCuuHo(ID_YeuCau) {
 function setTrangThaiYeuCau(ID_YeuCau, TrangThai) {
     if (ID_YeuCau) {
         var defer = q.defer();
-        conn.query("UPDATE YeuCauCuuHo SET TrangThai=? WHERE ID_YeuCau=?",[TrangThai,ID_YeuCau], function (error, results) {
+        conn.query("UPDATE yeucaucuuho SET TrangThai=? WHERE ID_YeuCau=?",[TrangThai,ID_YeuCau], function (error, results) {
             if (error)
                 defer.reject(error);
             else
@@ -187,7 +187,7 @@ function setTrangThaiYeuCau(ID_YeuCau, TrangThai) {
 function chiPhiYeuCauCuuHo(ID_YeuCau, MoTaChiPhi, TongChiPhi) {
     if (ID_YeuCau && MoTaChiPhi && TongChiPhi) {
         var defer = q.defer();
-        conn.query("UPDATE YeuCauCuuHo SET MoTaChiPhi=?, TongChiPhi=? WHERE ID_YeuCau=?",[MoTaChiPhi,TongChiPhi,ID_YeuCau], function (error, results) {
+        conn.query("UPDATE yeucaucuuho SET MoTaChiPhi=?, TongChiPhi=? WHERE ID_YeuCau=?",[MoTaChiPhi,TongChiPhi,ID_YeuCau], function (error, results) {
             if (error)
                 defer.reject(error);
             else

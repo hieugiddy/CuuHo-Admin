@@ -163,10 +163,10 @@ function getDanhGia(idChiNhanh) {
     return false;
 }
 
-function dsYeuCauCuuHo(ID_TaiKhoan, TrangThai) {
+function dsyeucaucuuho(ID_TaiKhoan, TrangThai) {
     var TrangThai = TrangThai.split(',');
     var defer = q.defer();
-    conn.query("SELECT * FROM YeuCauCuuHo WHERE TrangThai IN (?) AND ID_ChiNhanh=(SELECT ID_ChiNhanh FROM taikhoan WHERE ID_TaiKhoan=?) ORDER BY ThoiGian DESC", [TrangThai, ID_TaiKhoan], function (error, results) {
+    conn.query("SELECT * FROM yeucaucuuho WHERE TrangThai IN (?) AND ID_ChiNhanh=(SELECT ID_ChiNhanh FROM taikhoan WHERE ID_TaiKhoan=?) ORDER BY ThoiGian DESC", [TrangThai, ID_TaiKhoan], function (error, results) {
         if (error)
             defer.reject(error);
         else
@@ -178,7 +178,7 @@ function dsYeuCauCuuHo(ID_TaiKhoan, TrangThai) {
 
 function getChiTietYeuCau(ID_YeuCau) {
     var defer = q.defer();
-    conn.query('SELECT * FROM YeuCauCuuHo, taikhoan WHERE YeuCauCuuHo.ID_TaiKhoan=taikhoan.ID_TaiKhoan AND ID_YeuCau=?', [ID_YeuCau], function (error, results, fields) {
+    conn.query('SELECT * FROM yeucaucuuho, taikhoan WHERE yeucaucuuho.ID_TaiKhoan=taikhoan.ID_TaiKhoan AND ID_YeuCau=?', [ID_YeuCau], function (error, results, fields) {
         if (error)
             defer.reject(error);
         else
@@ -198,6 +198,6 @@ module.exports = {
     getDanhGia: getDanhGia,
     getChiTietDichVu: getChiTietDichVu,
     getChiTietUuDai: getChiTietUuDai,
-    dsYeuCauCuuHo: dsYeuCauCuuHo,
+    dsyeucaucuuho: dsyeucaucuuho,
     getChiTietYeuCau: getChiTietYeuCau
 }
