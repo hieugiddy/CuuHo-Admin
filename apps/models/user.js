@@ -124,6 +124,7 @@ function themYeuCauCuuHo(data) {
 
     return false;
 }
+
 function getIDYeuCau(ID_TaiKhoan, ID_ChiNhanh) {
     if (ID_TaiKhoan && ID_ChiNhanh) {
         var defer = q.defer();

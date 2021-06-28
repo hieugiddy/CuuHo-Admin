@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var DoiTacModel = require("../models/doitac");
 var dateFormat = require('dateformat');
+var decode = require('decode-html');
 
 router.route("/")
     .post(async function (req, res) {
@@ -98,8 +99,9 @@ router.route("/chitietdichvu/:id")
                 res.json({ "Messenger": "Đã có lỗi xảy ra" });
             else
                 result.then(function (dt) {
+                    dt[0].MoTa=decode(dt[0].MoTa);
                     res.render("chitietdichvu", {
-                        NoiDung: dt[0].MoTa.replace(/(\r\n|\n|\r)/gm, "").trim(),
+                        NoiDung: dt[0].MoTa,
                         TenDichVu: dt[0].TenDichVu
                     });
                 }).catch(function (err) {
